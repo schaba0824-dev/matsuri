@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白山まつり 公式ランディングページ</title>
+    <style>
+        /* --- Base & Reset Styles --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            color: #2c3e50;
+            background-color: #f7fbfc;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            vertical-align: middle;
+        }
+
+        /* --- Color Palette & Variable Definition ---
+           メインカラー: 清らかな白山の「延命水」を象徴する鮮やかな水色
+           アクセントカラー: 伝統の熱気と輝きを放つお祭り感のある黄色
+        --------------------------------------------- */
+        :root {
+            --primary-blue: #3aadd9;
+            --primary-blue-dark: #258cb3;
+            --accent-yellow: #ffd200;
+            --accent-yellow-light: #fff4b3;
+            --bg-light: #f0f9fc;
+            --text-dark: #1a2a3a;
+            --white: #ffffff;
+        }
+
+        /* --- Keyframes Animation --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes wave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1); }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+        }
+
+        /* --- Scroll Animation Trigger Class --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Common Components --- */
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            position: relative;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-yellow));
+            border-radius: 2px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header Section (Hero View) --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.35)), 
+                        url('https://images.unsplash.com/photo-1578469550956-0e16b69c6a3d?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            padding: 60px 20px;
+        }
+        .hero-content {
+            z-index: 2;
+            animation: fadeInUp 1.2s ease-out;
+        }
+        .hero-badge {
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+            padding: 6px 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 210, 0, 0.4);
+        }
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.7);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .hero-catch {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(transparent 60%, rgba(58, 173, 217, 0.8) 100%);
+            display: inline-block;
+            padding: 0 10px;
+            margin-bottom: 2.5rem;
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .hero-info-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 20px 40px;
+            border-radius: 12px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 90%;
+        }
+        .hero-date {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-blue-dark);
+            margin-bottom: 0.5rem;
+        }
+        .hero-place {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .hero-place span {
+            background-color: var(--accent-yellow-light);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+        }
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .wave-bg {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" fill="%23f7fbfc"/></svg>') repeat-x;
+            animation: wave 15s linear infinite;
+        }
+
+        /* --- Features Section --- */
+        .features {
+            padding: 100px 0;
+            background-color: var(--f7fbfc);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(58, 173, 217, 0.15);
+        }
+        .feature-img-wrapper {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        .feature-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .feature-card:hover .feature-img-wrapper img {
+            transform: scale(1.08);
+        }
+        .feature-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 4px 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 20px;
+        }
+        .feature-info {
+            padding: 25px;
+        }
+        .feature-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+        .feature-info p {
+            font-size: 0.95rem;
+            color: #556575;
+        }
+
+        /* --- Events & Schedule Section --- */
+        .events {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #e6f4f8 0%, #ffffff 100%);
+            position: relative;
+        }
+        .events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-yellow), var(--primary-blue));
+        }
+        .schedule-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px dashed #cfe3eb;
+        }
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        .schedule-label {
+            background-color: var(--text-dark);
+            color: var(--accent-yellow);
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            min-width: 120px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .schedule-text {
+            margin-left: 30px;
+            flex: 1;
+        }
+        .schedule-text h4 {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        .schedule-text p {
+            font-size: 0.95rem;
+            color: #667686;
+        }
+        .highlight-event {
+            border-left: 4px solid var(--primary-blue);
+            padding-left: 15px;
+        }
+
+        /* --- Access Info Section --- */
+        .access {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+        .access-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .access-map-mock {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            position: relative;
+            height: 350px;
+        }
+        .access-map-mock img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .map-overlay-label {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .access-details h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+        .access-details h3::before {
+            content: '📍';
+            margin-right: 8px;
+            font-size: 1.4rem;
+        }
+        .access-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .access-table th, .access-table td {
+            padding: 15px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eef2f5;
+        }
+        .access-table th {
+            width: 30%;
+            color: var(--primary-blue-dark);
+            font-weight: 700;
+        }
+        .access-table td {
+            color: #4a5560;
+        }
+
+        /* --- Footer Section --- */
+        .footer {
+            background-color: var(--text-dark);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 60px 0 20px;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .footer-brand p {
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+        .footer-contact h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .footer-contact p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .footer-contact .tel {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 30px;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .access-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .access-map-mock {
+                height: 280px;
+                order: 2;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            .hero-catch {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .schedule-box {
+                padding: 20px;
+            }
+            .schedule-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .schedule-label {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .schedule-text {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">祝・白山開山1300年</span>
+            <h1 class="hero-title">白山まつり</h1>
+            <p class="hero-catch">白山を開山した泰澄大師を祀る！</p>
+            <div>
+                <div class="hero-info-box">
+                    <div class="hero-date">開催日：令和8年7月18日(土)・19日(日)</div>
+                    <div class="hero-place"><span>会場</span>白峰総湯前広場（入場無料）</div>
+                </div>
+            </div>
+        </div>
+        <div class="wave-container">
+            <div class="wave-bg"></div>
+        </div>
+    </header>
+
+    <section class="features container fade-in-section" id="features">
+        <h2 class="section-title">お祭りの特徴</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-img-wrapper">
+                    <span class="feature-badge">伝統芸能</span>
+                    <img src="https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?auto=format&fit=crop&w=600&q=80" alt="和踊り・伝統の祭りイメージ">
+                </div>
+                <div class="feature-info">
+                    <h3>伝統の「かんこ踊り」</h3>
+                    <p>地元に深く根付いた風情ある和踊りと鮮やかな民謡の音色が、白峰の夜を美しく彩ります。観る人を幻想的な世界へと誘います。</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrapper">
+                    <span class="feature-badge">名水振る舞い</span>
+                    <img src="https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&q=80" alt="清らかな水・延命水のイメージ">
+                </div>
+                <div class="feature-info">
+                    <h3>恵みの「延命水」</h3>
+                    <p>白山の清らかな自然が育んだ名水「延命水」が来場者に振る舞われます。渇いた身体に染み渡る、お祭りならではの特別な癒やしを体験してください。</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-img-wrapper">
+                    <span class="feature-badge">歴史の節目</span>
+                    <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" alt="日本の歴史・厳かな神社のイメージ">
+                </div>
+                <div class="feature-info">
+                    <h3>白山開山1300年の歴史</h3>
+                    <p>白山を切り拓いた泰澄大師を祀る由緒正しきお祭り。長い歴史に想いを馳せながら、地域の人々と観光客が一つになる特別な2日間です。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="events" id="events">
+        <div class="container fade-in-section">
+            <h2 class="section-title">主な出し物・イベント内容</h2>
+            <div class="schedule-box">
+                <div class="schedule-item highlight-event">
+                    <div class="schedule-label">特設ステージ</div>
+                    <div class="schedule-text">
+                        <h4>伝統和踊り「かんこ踊り」＆民謡披露</h4>
+                        <p>地元保存会による迫力ある和踊りと、心に響く民謡のステージ。誰もが惹きつけられる伝統の舞です。</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-label">ステージイベント</div>
+                    <div class="schedule-text">
+                        <h4>華麗な歌謡ショー</h4>
+                        <p>会場を盛り上げるゲストを迎えた歌謡ショー。お祭りの熱気をさらに高めます。</p>
+                    </div>
+                </div>
+                <div class="schedule-item highlight-event">
+                    <div class="schedule-label">会場内特設ブース</div>
+                    <div class="schedule-text">
+                        <h4>銘水「延命水」の無料振る舞い</h4>
+                        <p>白山の恵みである延命水を皆様にお届け。どなたでもご自由にお飲みいただけます（無くなり次第終了）。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="access container fade-in-section" id="access">
+        <h2 class="section-title">アクセス情報</h2>
+        <div class="access-wrapper">
+            <div class="access-details">
+                <h3>会場：白峰総湯前広場</h3>
+                <table class="access-table">
+                    <tr>
+                        <th>住所</th>
+                        <td>石川県白山市白峰（白峰総湯周辺）</td>
+                    </tr>
+                    <tr>
+                        <th>車でのアクセス</th>
+                        <td>国道159号線を白峰方面へ（金沢市内から車で約1時間30分）</td>
+                    </tr>
+                    <tr>
+                        <th>参加条件</th>
+                        <td>どなたでも自由にご参加いただけます</td>
+                    </tr>
+                    <tr>
+                        <th>料金</th>
+                        <td>入場無料</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="access-map-mock">
+                <img src="https://images.unsplash.com/photo-1524661135339-9140b00787e3?auto=format&fit=crop&w=800&q=80" alt="緑豊かな白山エリア・山道のイメージ">
+                <div class="map-overlay-label">豊かな自然に囲まれた白峰エリア</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h2>白山まつり</h2>
+                    <p>〜 白山開山1300年記念 〜</p>
+                </div>
+                <div class="footer-contact">
+                    <h3>お問い合わせ先</h3>
+                    <p>白峰市民サービス課</p>
+                    <p class="tel">TEL: 076-000-0000</p>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Hakusan Matsuri. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const faders = document.querySelectorAll('.fade-in-section');
+            
+            const appearOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('is-visible');
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+            
+            // Initial trigger for hero section or elements already in view
+            setTimeout(() => {
+                const elements = document.querySelectorAll('.fade-in-section');
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if(rect.top < window.innerHeight) {
+                        el.classList.add('is-visible');
+                    }
+                });
+            }, 200);
+        });
+    </script>
+</body>
+</html>
